@@ -1,0 +1,4 @@
+.tabela-controle-nfs thead tr th, .tabela-controle-nfs tbody tr td {
+    border: 0.5px solid black;
+    padding: .75rem;
+}

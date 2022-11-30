@@ -1,0 +1,21 @@
+.tabela-controle-de-imposto {
+    margin-top: 50px;
+}
+
+.tabela-controle-de-imposto thead tr th {
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: default;
+}
+.tabela-controle-de-imposto thead tr th:hover {
+    background-color: rgb(234, 229, 229);
+}
+
+.tabela-controle-de-imposto tbody tr td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: default;
+}
+.tabela-controle-de-imposto tbody tr td:hover {
+    background-color: rgb(234, 229, 229);
+}

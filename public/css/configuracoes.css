@@ -1,0 +1,23 @@
+.div-pai-config {
+    width: 100%;
+    margin: 10pt;
+}
+
+.needs-validation {
+    border: 0.5px solid #ccc;
+    padding: 10px;
+}
+
+.div-elems {
+    margin-top: 25pt;
+}
+
+.nav {
+    /* color: white; */
+    background-color: rgb(116, 100, 238);
+}
+
+
+.table-funcionarios tbody tr td input {
+    border: none;
+}

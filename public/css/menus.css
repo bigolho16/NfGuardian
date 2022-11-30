@@ -1,0 +1,8 @@
+.icones-do-crud {
+    float: right;
+    /* border-radius: 10px 10px 10px 10px; */
+    cursor: pointer;
+}
+.icones-do-crud:hover {
+    /* background-color: #ccc!important; */
+}
