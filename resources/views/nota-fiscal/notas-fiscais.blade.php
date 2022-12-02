@@ -7,6 +7,7 @@
     <title>Notas Fiscais</title>
 </head>
 <body>
-    <h1>Todas as notas fiscais estarão aqui baseados em seus meses (períodos) etc...</h1>
+    <h1>Esta Página não está disponível no momento
+        Isso pode ter ocorrido devido a um erro técnico no qual estamos trabalhando para corrigir. Tente recarregar esta página.</h1>
 </body>
 </html>

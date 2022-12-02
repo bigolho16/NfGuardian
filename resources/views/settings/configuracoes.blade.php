@@ -205,9 +205,10 @@
     {{-- Modal excluir funcionário --}}
     <div class="modal fade" id="modaldeexcluirfuncionario" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <form action="{{route('configuracoes.destroy', ['configuraco'=>1])}}" method="POST" id="form-delete-funcionario">
+            <form action="{{route('configuracoes.destroy', ['configuraco'=>0])}}" method="POST" id="form-delete-funcionario">
+                {!! method_field('delete') !!}
                 @csrf
-                <input type="hidden" id="inp_cod_func" name="codigo_funcionario" value="">
+                {{-- <input type="hidden" id="inp_cod_func" name="codigo_funcionario" value=""> --}}
 
                 <div class="modal-content">
                 <div class="modal-header">
@@ -221,7 +222,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
-                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Sim</button>
+                    <button type="submit" class="btn btn-secondary">Sim</button>
                 </div>
                 </div>
             </form>
