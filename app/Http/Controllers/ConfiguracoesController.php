@@ -192,9 +192,13 @@ class ConfiguracoesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        dd('caiu aqui no destroy' + $request->codigo_funcionario);
+        //Apagar o funcionario do mapa
+        $funcionarioencontrado = $this->funcionario->findOrFail($id);
+        $funcionarioencontrado->delete();
+        
+        return redirect()->route("configuracoes.index")->with("success", "Funcionário excluído com sucesso!");
     }
 
     public function gerarSessaoDeNomeCnpj ($nome, $cnpj) {

@@ -10,9 +10,9 @@
             <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
             <i class="fa fa-remove"></i>
             </a>
-            <img src="/w3images/avatar_g2.jpg" style="width:45%;" class="w3-round"><br><br>
-            <h4><b>PORTFOLIO</b></h4>
-            <p class="w3-text-grey">Template by W3.CSS</p>
+            {{-- <img src="/w3images/avatar_g2.jpg" style="width:45%;" class="w3-round"><br><br> --}}
+            <h4><b>NFGUARDIAN</b></h4>
+            <p class="w3-text-grey">Template by <a href="https://www.w3schools.com/">W3.CSS</a></p>
         </div>
 
         <div class="w3-bar-block">
@@ -42,7 +42,7 @@
         <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
         <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
         <div class="w3-container">
-            <h1><b>NFGUARDIAN</b></h1>
+            <h1><b></b></h1>
             
             <div class="w3-section w3-bottombar w3-padding-16">
             
