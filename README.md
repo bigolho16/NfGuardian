@@ -5,3 +5,8 @@ Este sistema tem como finalidade o armazenamento por classificação eficiente d
 
 ## Teste de uso:
 Consulte: https://nfguardian.com.br/login e forneça as seguintes credênciais para teste do aplicativo (usuario: 95.636.571/0001-23 e senha: contadeteste)
+
+## Contato:
+| Integrante | Usuário Git | E-mail para contato |
+| --- | --- | --- |
+| Leandro Lobo | [@LeandroLobo](https://github.com/bigolho16) | bigolho900@gmail.com |
