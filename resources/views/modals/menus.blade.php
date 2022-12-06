@@ -51,8 +51,11 @@
             if ($request_uri == "/estoque" || $request_uri == "/estoque/produto") {
 ?>
             <button onclick="window.location.href = '{{route('estoque')}}'" class="w3-button w3-black">Estoque</button>
+
             <button onclick="window.location.href = '{{route('estoque.produto')}}'" class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Produto</button>
+
             <button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
+
             <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>
 <?php
             }
@@ -60,9 +63,12 @@
 <?php
             if ($request_uri == "/nota-fiscal" || $request_uri == "/nota-fiscal/controle-de-nfs" || $request_uri == "/nota-fiscal/controle-de-imposto") {
 ?>
-            <button onclick="window.location.href = '{{route('notas-fiscais')}}'" class="w3-button w3-black">Notas Fiscais</button>
-            <button onclick="window.location.href = '{{route('controle-de-nfs.index')}}'" class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Controle de NF</button>
-            <button onclick="window.location.href = '{{route('controle-de-imposto.index')}}'" class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Controle de Imposto</button>
+            <button onclick="window.location.href = '{{route('notas-fiscais')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal") { echo 'w3-black'; }else { echo 'w3-white'; } ?>">Notas Fiscais</button>
+
+            <button onclick="window.location.href = '{{route('controle-de-nfs.index')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal/controle-de-nfs") { echo 'w3-black'; }else { echo 'w3-white'; } ?>"><i class="fa fa-diamond w3-margin-right"></i>Controle de NF</button>
+
+            <button onclick="window.location.href = '{{route('controle-de-imposto.index')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal/controle-de-imposto") { echo 'w3-black'; }else { echo 'w3-white'; } ?>"><i class="fa fa-diamond w3-margin-right"></i>Controle de Imposto</button>
+
 <?php
             }
 ?>            
