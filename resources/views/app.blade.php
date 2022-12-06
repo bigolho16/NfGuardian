@@ -88,6 +88,9 @@
   if ($request_uri == "/nota-fiscal") {
 ?>
     @include('nota-fiscal.notas-fiscais')
+    @stack("estilo-notas-fiscais")
+    @stack('script-notas-fiscais')
+    @yield('formulario-de-insercao-notas')
 <?php
   }
 ?>
