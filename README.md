@@ -3,6 +3,9 @@
 ## Objetivo:
 Este sistema tem como finalidade o armazenamento por classificação eficiente de notas fiscais, não só ajudando as empresas para com suas obrigações fiscais perante a receita federal, mas também mantendo o histórico das transações da empresa em dia.
 
+## Situação:
+- Em Desenvolvimento
+
 ## Tecnologias:
 - PHP 8.1.10
 - Composer version 2.4.3
