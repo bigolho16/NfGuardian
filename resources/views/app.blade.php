@@ -99,6 +99,8 @@
 ?>
     @include('nota-fiscal.controle-de-nfs')
     @stack("estilo-controle-de-nfs")
+    @stack('script-controle-de-nfs')
+    @yield('campo-de-pesquisa-para-tabela')
     @yield('tabela-controle-de-nfs')
 <?php
   }

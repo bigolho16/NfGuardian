@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ControleDeNF;
 use App\Models\ControleDeImposto;
 use App\Models\ValoresImpostos;
+use App\Models\SituacaoNota;
 
 
 class ControleDeNFController extends Controller
@@ -17,16 +18,17 @@ class ControleDeNFController extends Controller
      */
     public function index()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         if (isset($_SESSION['sessao_empresa'])) {
-            // Criar algoritmo que:
-            // Ligue tabela nota fiscal a impostos e valores desses impostos (todos estão em tabelas separadas)
-            $todoscontroledenf = $this->obterNotaComTudoQueLigaNela ();
 
-            //Retornar colunas de impostos (que é manipulada pelo usuário)
+            //Redirecionamento normal para a página
+            $controledenf = new ControleDeNF();
+            $notasfiltradas = $controledenf->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)->limit(20)->get();
             $todosimpostos = $this->obterCategoriaDeImposto ();
+            return view("app", compact('notasfiltradas', 'todosimpostos'));
 
-            return view("app", compact('todoscontroledenf', 'todosimpostos'));
         }else {
             return redirect()->route("login.index");
         }
@@ -50,13 +52,81 @@ class ControleDeNFController extends Controller
      */
     public function store(Request $request)
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         //Objetivo: Salvar o dado que vem de um input de uma linha
-        $coluna = $request->input('coluna');
-        $dado = $request->input('dado');
+        if (isset($request->coluna) || isset($request->dado)) {
+            $coluna = $request->input('coluna');
+            $dado = $request->input('dado');
 
-        $this->inserirEmControleDeNF ($coluna, $dado);
+            $this->inserirEmControleDeNF ($coluna, $dado);
+        }
 
-        dd("Veja se inseriu ou não!");
+        if (isset($_POST["todas_as_notas"])) {
+            if ($_POST["todas_as_notas"] == true) {
+                // Obter notas baseado em periodo minimo e maximo definido pelo usuário
+                $notasfiltradas = $this->obterTodasNotasPorPeriodo($_POST["periodo_inicial"], $_POST["periodo_final"]);
+
+                //Retornar colunas de impostos (que é manipulada pelo usuário)
+                $todosimpostos = $this->obterCategoriaDeImposto ();
+
+                //Gerar sessões de retorno a página para preencher automaticamente os campos
+                $_SESSION['todas_as_notas'] = $request->todas_as_notas;
+                $_SESSION['periodo_inicial'] = $request->periodo_inicial;
+                $_SESSION['periodo_final'] = $request->periodo_final;
+
+                return view('app', compact('notasfiltradas', 'todosimpostos'));
+            }
+        }else if (isset($_POST["notas_pagas"])) {
+            if ($_POST['notas_pagas'] == true) {
+                // Obter notas pagas baseadas no periodo de pesquisa
+                $notasfiltradas = $this->obterNotasPagasPorPeriodo ($request->periodo_inicial, $request->periodo_final);
+                
+                //Retornar colunas de impostos (que é manipulada pelo usuário)
+                $todosimpostos = $this->obterCategoriaDeImposto ();
+
+                //Gerar sessões de retorno a página para preencher automaticamente os campos
+                $_SESSION['notas_pagas'] = $request->notas_pagas;
+                $_SESSION['periodo_inicial'] = $request->periodo_inicial;
+                $_SESSION['periodo_final'] = $request->periodo_final;
+
+                return view('app', compact('notasfiltradas', 'todosimpostos'));
+            }
+        }else if (isset($_POST["notas_nao_pagas"])) {
+            if ($_POST['notas_nao_pagas'] == true) {
+                // Obter notas pagas baseadas no periodo de pesquisa
+                $notasfiltradas = $this->obterNotasNaoPagasPorPeriodo ($request->periodo_inicial, $request->periodo_final);
+
+                //Retornar colunas de impostos (que é manipulada pelo usuário)
+                $todosimpostos = $this->obterCategoriaDeImposto ();
+
+                //Gerar sessões de retorno a página para preencher automaticamente os campos
+                $_SESSION['notas_nao_pagas'] = $request->notas_nao_pagas;
+                $_SESSION['periodo_inicial'] = $request->periodo_inicial;
+                $_SESSION['periodo_final'] = $request->periodo_final;
+
+                return view('app', compact('notasfiltradas', 'todosimpostos'));
+            }
+        }
+
+        if (isset($request->codigo_nota)) {
+            //Busca a nota pelo código
+            $cdnf = new ControleDeNF ();
+            $notasfiltradas = $cdnf
+                                ->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)
+                                ->where("nota_fiscal_codigo", "LIKE", "%" . $request->codigo_nota . "%")
+                                ->get();
+        
+            //Retornar colunas de impostos (que é manipulada pelo usuário)
+            $todosimpostos = $this->obterCategoriaDeImposto ();
+
+            //Gerar sessões de retorno a página para preencher automaticamente os campos
+            $_SESSION['codigo_nota'] = $request->codigo_nota;
+
+            return view('app', compact('notasfiltradas', 'todosimpostos'));
+        }
     }
 
     /**
@@ -217,26 +287,75 @@ class ControleDeNFController extends Controller
 
     public function obterSomenteUmaNotaComTudoQueLigaNela ($id) {
         $cdnf = new ControleDeNF();
-        $notaline = $cdnf->find($id);
-        $notalineCE = $notaline;
+        $notalineCE = $cdnf->find($id);
         return $notalineCE;
     }
 
-    public function obterNotaComTudoQueLigaNela () {
-        //Montar um script inprovisado (gambiarra), para pegar tds elementos com todas suas chaves estrangeiras
-        $controledenf = new ControleDeNF();
-        $todoscontroledenf = $controledenf->all();
-        $notaWithChEstrangs = [];
-        foreach ($todoscontroledenf as $v) {
-            array_push($notaWithChEstrangs, $controledenf->find($v->codigo)); 
+    public function obterTodasNotasPorPeriodo ($periodomin, $periodomax) {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
         }
-        return ($notaWithChEstrangs);
+
+        $controledenf = new ControleDeNF();
+        $tnpp         = $controledenf
+                            ->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)
+                            ->whereDate('data_emissao', '>=', $periodomin)
+                            ->whereDate('data_emissao', '<=', $periodomax)
+                            ->limit(20)
+                            ->get();
+
+        return $tnpp;
+    }
+    public function obterNotasPagasPorPeriodo ($periodomin, $periodomax) {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        //1º Pegar as notas da minha empresa (todas):
+        $controledenf = new ControleDeNF();
+        $nppp         = $controledenf
+                            ->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)
+                            ->whereDate('data_emissao', '>=', $periodomin)
+                            ->whereDate('data_emissao', '<=', $periodomax)
+                            ->get();
+
+        //Excluir as notas que 'não forem pagas'
+        foreach ($nppp as $k => $v) {
+            if ($nppp[$k]->situacao_nf[0]->nota_paga == 0) {
+                unset($nppp[$k]);
+            }
+        }
+        return $nppp;
+    }
+    public function obterNotasNaoPagasPorPeriodo ($periodomin, $periodomax) {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        //1º Pegar as notas da minha empresa (todas):
+        $controledenf = new ControleDeNF();
+        $nnppp         = $controledenf
+                            ->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)
+                            ->whereDate('data_emissao', '>=', $periodomin)
+                            ->whereDate('data_emissao', '<=', $periodomax)
+                            ->get();
+
+        //Excluir as notas que 'não forem pagas'
+        foreach ($nnppp as $k => $v) {
+            if ($nnppp[$k]->situacao_nf[0]->nota_paga == 1) {
+                unset($nnppp[$k]);
+            }
+        }
+        return $nnppp;
     }
 
     public function obterCategoriaDeImposto () {
         $cdi = new ControleDeImposto ();
-        
-        $allcdi = $cdi->all();
+        // $allcdi = $cdi->all();
+        $allcdi = $cdi
+                    ->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)
+                    ->limit(20)
+                    ->get();
 
         return $allcdi;
     }

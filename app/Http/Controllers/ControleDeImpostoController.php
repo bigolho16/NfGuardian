@@ -14,11 +14,15 @@ class ControleDeImpostoController extends Controller
      */
     public function index()
     {
-        session_start();
+        //Ativa a sessão caso não esteja ativa
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
         if (isset($_SESSION['sessao_empresa'])) {
             //Pegar todos os dados e redirecionar
             $cdi = new ControleDeImposto();
-            $allImpostos = $cdi->get();
+            // $allImpostos = $cdi->get();
+            $allImpostos = $cdi->where("empresa_proprietaria", $_SESSION['sessao_empresa']->codigo)->limit(20)->get();
 
             return view("app", compact('allImpostos'));
         }else {

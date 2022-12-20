@@ -2,3 +2,18 @@
     border: 0.5px solid black;
     padding: .75rem;
 }
+
+.nav-bar-padding-bottom {
+    padding-bottom: 15px;
+}
+
+.check-notas-pagas-ou-nao {
+    margin:0 12px 0 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+.nav-bar-fonte-ideal {
+    font-size: small;
+}

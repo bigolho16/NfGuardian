@@ -34,7 +34,39 @@ function moeda(a, e, r, t) {
     }
     return !1
 }
-//  Entrar caracteres:  <br><br>
-//  <form>  
-//  Valor em R$: <input type="text" name="valor" placeholder="Digite aqui" onKeyPress="return(moeda(this,'.',',',event))">  
-//  </form> 
+
+function fileValidation () {
+    var fileInput = 
+        document.getElementsByClassName('form-control-file')[0];
+        
+    var filePath = fileInput.value;
+    
+    // Allowing file type
+    var allowedExtensions = 
+            /(\.pdf|\.xml|\.doc|\.docx|\.xls|\.xlsx|\.ppt|\.pptx|\.txt|\.csv|\.jpg|\.jpeg|\.png)$/i;
+        
+    if (!allowedExtensions.exec(filePath)) {
+        alert('Tipo de arquivo inválido!');
+        fileInput.value = '';
+        return false;
+    }
+
+    // Lembrando que size retorna em formato byte, logo 15728640 Bytes == 15 Mb
+    if (fileInput.files[0].size > 15728640) {
+        alert('Tamanho de arquivo inválido');
+        fileInput.value = '';
+        return false;
+    }
+}
+function confirmEmptyFile () {
+    var fileInput = 
+        document.getElementsByClassName('form-control-file')[0];
+
+    if (fileInput.value == "") {
+        let msg = "Deseja enviar mesmo sem ter escolhido um arquivo?";
+
+        if (confirm(msg) == false) {
+            return false;
+        }
+    }
+}

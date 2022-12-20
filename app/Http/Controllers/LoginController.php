@@ -81,7 +81,7 @@ class LoginController extends Controller
                     $_SESSION["sessao_empresa"] = $empresaencontrada;
 
                     //Redireciona para página principal
-                    return redirect()->route("notas-fiscais");
+                    return redirect()->route("nota-fiscal.index");
                 }else {
                     $this->gerarSessaoDosInputs ($cnpj, "");
 
