@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -19,7 +17,7 @@
 <body <?php if (session('success') || session('error')) { echo 'onload="mostramodal ()"'; } ?>>
     <ul class="nav">
         <li class="nav-item">
-            <a href="{{route('notas-fiscais')}}"><span class="nav-link active" style="color:white"><i class="fa fa-university" aria-hidden="true"></i>
+            <a href="{{route('nota-fiscal.index')}}"><span class="nav-link active" style="color:white"><i class="fa fa-university" aria-hidden="true"></i>
                  Pagina inicial</span></a>
         </li>
     </ul>

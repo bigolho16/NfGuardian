@@ -26,13 +26,13 @@ Route::prefix('estoque')->group(function () {
     Route::get("/produto", "App\Http\Controllers\FunctionsController@index")->name("estoque.produto");
 });
 
-Route::prefix('nota-fiscal')->group(function () {
-    Route::get('/', 'App\Http\Controllers\FunctionsController@index')->name("notas-fiscais");
-    
+Route::prefix('nota-fiscal')->group(function () {    
     Route::resource("controle-de-nfs", App\Http\Controllers\ControleDeNFController::class);
 
     Route::resource("controle-de-imposto", App\Http\Controllers\ControleDeImpostoController::class);
 });
+
+Route::resource('nota-fiscal', App\Http\Controllers\NotaFiscalController::class); //('/', 'App\Http\Controllers\FunctionsController@index')->name("notas-fiscais");
 
 Route::get('configuracoes/alterar-funcionario', function () {
     return view('settings.alterar-funcionario');

@@ -17,7 +17,7 @@
 
         <div class="w3-bar-block">
             {{-- <a href="{{ route('dashboard') }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>Dashboard</a> --}}
-            <a href="{{route('notas-fiscais')}}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-address-card-o w3-margin-right"></i>Nota Fiscal</a>
+            <a href="{{route('nota-fiscal.index')}}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-address-card-o w3-margin-right"></i>Nota Fiscal</a>
             <a href="{{ route('configuracoes.index') }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog w3-margin-right"></i>Configurações</a>
             <a href="{{ route('logout') }}" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-power-off w3-margin-right"></i>Sair</a>
         </div>
@@ -39,7 +39,7 @@
 
     <!-- Header -->
     <header id="portfolio">
-        <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+        {{-- <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a> --}}
         <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
         <div class="w3-container">
             <h1><b></b></h1>
@@ -63,7 +63,7 @@
 <?php
             if ($request_uri == "/nota-fiscal" || $request_uri == "/nota-fiscal/controle-de-nfs" || $request_uri == "/nota-fiscal/controle-de-imposto") {
 ?>
-            <button onclick="window.location.href = '{{route('notas-fiscais')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal") { echo 'w3-black'; }else { echo 'w3-white'; } ?>">Notas Fiscais</button>
+            <button onclick="window.location.href = '{{route('nota-fiscal.index')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal") { echo 'w3-black'; }else { echo 'w3-white'; } ?>">Notas Fiscais</button>
 
             <button onclick="window.location.href = '{{route('controle-de-nfs.index')}}'" class="w3-button <?php if ($request_uri == "/nota-fiscal/controle-de-nfs") { echo 'w3-black'; }else { echo 'w3-white'; } ?>"><i class="fa fa-diamond w3-margin-right"></i>Controle de NF</button>
 
@@ -71,6 +71,8 @@
 
 <?php
             }
+
+            if ($request_uri == "/nota-fiscal/controle-de-nfs") {
 ?>            
             {{-- ícones dos CRUD aqui somente mexe nele de acordo com cada página ou seja, com a troca, oculta uns, não mostra nenhum e etc...  --}}
             <div class="icones-do-crud">
@@ -84,7 +86,9 @@
                     refresh
                 </span>
             </div>
-
+<?php
+            }
+?>
             </div>
         </div>
     </header>

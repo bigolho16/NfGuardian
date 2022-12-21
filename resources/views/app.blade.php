@@ -88,6 +88,9 @@
   if ($request_uri == "/nota-fiscal") {
 ?>
     @include('nota-fiscal.notas-fiscais')
+    @stack("estilo-notas-fiscais")
+    @stack('script-notas-fiscais')
+    @yield('formulario-de-insercao-notas')
 <?php
   }
 ?>
@@ -96,6 +99,8 @@
 ?>
     @include('nota-fiscal.controle-de-nfs')
     @stack("estilo-controle-de-nfs")
+    @stack('script-controle-de-nfs')
+    @yield('campo-de-pesquisa-para-tabela')
     @yield('tabela-controle-de-nfs')
 <?php
   }

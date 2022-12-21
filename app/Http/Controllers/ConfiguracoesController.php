@@ -27,7 +27,7 @@ class ConfiguracoesController extends Controller
         session_start();
         if (isset($_SESSION['sessao_empresa'])) {
             //Listar todos os funcionários da empresa
-            $todosfuncionarios = $this->funcionario->all();
+            $todosfuncionarios = $this->funcionario->where('codigoEmpresa', $_SESSION['sessao_empresa']->codigo)->limit(20)->get();
 
             return view("settings.configuracoes", compact("todosfuncionarios"));
         }else {

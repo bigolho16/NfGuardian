@@ -2,7 +2,72 @@
 <link rel="stylesheet" href="{{asset('css/controle-de-nfs.css')}}">
 @endpush
 
+@push('script-controle-de-nfs')
+<script src="{{asset('js/controle-de-nfs.js')}}"></script>
+@endpush
+
+@section('campo-de-pesquisa-para-tabela')
+
+{{-- <h4>Notas Fiscais:</h4> --}}
+
+<nav class="navbar navbar-light bg-light nav-bar-padding-bottom nav-bar-fonte-ideal">
+
+    <form action="{{ route('controle-de-nfs.store') }}" method="POST">
+        <?php
+            $tchecked = ""; $nchecked = ""; $nnchecked = ""; $periodo_inicial = ""; $periodo_final = ""; $codigo_nota = "";
+            if (isset($_SESSION['todas_as_notas'])) {
+                $tchecked = "checked='checked'";
+            } else if (isset($_SESSION['notas_pagas'])) {
+                $nchecked = "checked='checked'";
+            } else if (isset($_SESSION['notas_nao_pagas'])) {
+                $nnchecked = "checked='checked'";
+            } else {
+                if (empty($_SESSION['codigo_nota'])) {
+                    $tchecked = "checked='checked'";
+                }
+            }
+
+            if (isset($_SESSION['periodo_inicial'])) {
+                $periodo_inicial = "value=".$_SESSION['periodo_inicial']."";
+            }
+            if (isset($_SESSION['periodo_final'])) {
+                $periodo_final = "value=".$_SESSION['periodo_final']."";
+            }
+
+            if (isset($_SESSION['codigo_nota'])) {
+                $codigo_nota = $_SESSION['codigo_nota'];
+            }
+        ?>
+
+        @csrf
+        <label for="check-nota-paga">Todas as notas</label>
+        <a class="navbar-brand"><input name="todas_as_notas" class="check-notas-pagas-ou-nao" id="check-nota-paga" type="checkbox" {{$tchecked}} onclick="marcaDesmarca(this)"></a>
+        <label for="check-nota-paga">Nota paga</label>
+        <a class="navbar-brand"><input name="notas_pagas" class="check-notas-pagas-ou-nao" id="check-nota-paga" type="checkbox" {{$nchecked}} onclick="marcaDesmarca(this)"></a>
+        <label for="check-nota-nao-paga">Não paga</label>
+        <a class="navbar-brand"><input name="notas_nao_pagas" class="check-notas-pagas-ou-nao" id="check-nota-nao-paga" type="checkbox" {{$nnchecked}} onclick="marcaDesmarca(this)"></a>
+
+        <label for="inp-search-data">Período entre</label>
+        <a class="navbar-brand"><input name="periodo_inicial" class="form-control mr-sm-2" type="date" {{$periodo_inicial}} placeholder="Search" id="inp-search-data" required oninvalid="this.setCustomValidity('Determine um período inicial de pesquisa!')" oninput="setCustomValidity('')"></a>
+        <a class="navbar-brand"><input name="periodo_final" class="form-control mr-sm-2" type="date" {{$periodo_final}} placeholder="Search" id="inp-search-data" required oninvalid="this.setCustomValidity('Determine um período final de pesquisa!')" oninput="setCustomValidity('')"></a>
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Buscar</button>
+    </form>
+        
+    
+    <form class="form-inline" action="{{ route('controle-de-nfs.store') }}" method="POST">
+        @csrf
+        <input class="form-control mr-sm-2" name="codigo_nota" type="search" value='{{$codigo_nota}}' placeholder="Código da Nota" aria-label="Search">
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Buscar</button>
+    </form>
+</nav>
+
+<?php
+    unset($_SESSION['todas_as_notas'], $_SESSION['notas_pagas'], $_SESSION['notas_nao_pagas'], $_SESSION['periodo_inicial'], $_SESSION['periodo_final'], $_SESSION['codigo_nota']);
+?>
+@endsection
+
 @section('tabela-controle-de-nfs')
+
 <table class="tabela-controle-nfs">
     <thead>
         <tr>
@@ -31,8 +96,17 @@
         </tr>
     </thead>
     <tbody class="corpo-alteravel">
+        
+        @forelse ($notasfiltradas as $controledenf)
+        <?php
+            $data = $controledenf->data_emissao;
+            if(count(explode("/",$data)) > 1){
+                $controledenf->data_emissao = implode("-",array_reverse(explode("/",$data)));
+            }elseif(count(explode("-",$data)) > 1){
+                $controledenf->data_emissao = implode("/",array_reverse(explode("-",$data)));
+            }
+        ?>
 
-        @forelse ($todoscontroledenf as $controledenf)
         <tr class="line-{{$controledenf->codigo}}">
             <td class="body-codigo-{{$controledenf->codigo}} nota_fiscal_codigo">{{$controledenf->nota_fiscal_codigo}}</td>
             <td class="body-codigo-{{$controledenf->codigo}} data_emissao">{{$controledenf->data_emissao}}</td>
@@ -93,7 +167,7 @@
     </tbody>
 </table>
 
-{{-- @foreach ($todoscontroledenf as $item)
+{{-- @foreach ($notasfiltradas as $item)
     {{($item->valores_impostos)}}
 
 @endforeach --}}
